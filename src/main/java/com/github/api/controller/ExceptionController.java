@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.github.api.exception.ErrorResponse;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.web.reactive.result.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
 @ResponseBody
@@ -23,7 +23,6 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
     public ErrorResponse handleNoSuchUserExistsException(NoSuchUserExistsException e){
         return new ErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage());
     }
-
 
     @ExceptionHandler(value = UnsupportedHeaderException.class)
     @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)

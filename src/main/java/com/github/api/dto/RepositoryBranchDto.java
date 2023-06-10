@@ -10,7 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RepositoryBranchDto {
-    private String name;
-    private String owner;
+    private String repositoryName;
+    private String ownerLogin;
     private List<BranchDto> branch;
 }

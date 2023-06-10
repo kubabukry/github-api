@@ -3,10 +3,13 @@ package com.github.api.controller;
 import com.github.api.dto.BranchDto;
 import com.github.api.dto.RepositoryBranchDto;
 import com.github.api.dto.RepositoryDto;
+import com.github.api.exception.NoSuchUserExistsException;
+import com.github.api.exception.UnsupportedHeaderException;
 import com.github.api.service.GithubService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
