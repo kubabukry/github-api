@@ -4,10 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class RepositoryDto {
+@NoArgsConstructor
+public class RepositoryBranchDto {
     private String name;
-    private String login;
+    private String owner;
+    private List<BranchDto> branch;
 }

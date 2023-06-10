@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BranchDto {
     private String name;
-    private String sha;
+    private String lastCommitSha;
 }
