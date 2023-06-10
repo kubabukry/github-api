@@ -8,6 +8,9 @@ import com.github.api.dto.RepositoryBranchDto;
 import com.github.api.dto.RepositoryDto;
 import com.github.api.exception.NoSuchUserExistsException;
 import com.github.api.exception.UnsupportedHeaderException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,9 +20,13 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+
+
 //todo Error response for 406 needs modification
 @Service
 public class GithubService {
+
+    private final Logger logger = LoggerFactory.getLogger(GithubService.class);
     private final WebClient webClient;
 
     private final ObjectMapper objectMapper;
@@ -30,6 +37,9 @@ public class GithubService {
     }
 
     public Mono<List<RepositoryDto>> getAllRepos(String username) {
+        if(username.isBlank()){
+            return Mono.error(new NoSuchUserExistsException("User must not be blank"));
+        }
         return webClient.get()
                 .uri("/users/" + username + "/repos")
                 .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
@@ -59,12 +69,19 @@ public class GithubService {
                         return repositoryDto;
                     });
         } catch (JsonProcessingException e) {
-            return Flux.error(e);
+            logger.error("Cannot parse Json", e);
+            return Flux.error(new IllegalArgumentException("Error occurred"));
         }
     }
 
 
     public Mono<List<BranchDto>> getAllBranches(String username, String repo) {
+        if(username.isBlank()){
+            return Mono.error(new NoSuchUserExistsException("User must not be blank"));
+        }
+        if(repo.isBlank()){
+            return Mono.error(new NoSuchUserExistsException("Repo must not be blank"));
+        }
         return webClient.get()
                 .uri("/repos/" + username + "/" + repo + "/branches")
                 .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
@@ -96,7 +113,8 @@ public class GithubService {
                         return branchDto;
                     });
         } catch (JsonProcessingException e) {
-            return Flux.error(e);
+            logger.error("Cannot parse Json", e);
+            return Flux.error(new IllegalArgumentException("Error occurred"));
         }
     }
 
@@ -106,8 +124,8 @@ public class GithubService {
                 .flatMap(repo -> getAllBranches(username, repo.getName())
                         .map(branches -> {
                             RepositoryBranchDto repoBranchDto = new RepositoryBranchDto();
-                            repoBranchDto.setName(repo.getName());
-                            repoBranchDto.setOwner(repo.getLogin());
+                            repoBranchDto.setRepositoryName(repo.getName());
+                            repoBranchDto.setOwnerLogin(repo.getLogin());
                             repoBranchDto.setBranch(branches);
                             return repoBranchDto;
                         })
