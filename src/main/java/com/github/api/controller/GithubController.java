@@ -1,6 +1,7 @@
 package com.github.api.controller;
 
 import com.github.api.dto.BranchDto;
+import com.github.api.dto.RepositoryBranchDto;
 import com.github.api.dto.RepositoryDto;
 import com.github.api.service.GithubService;
 import org.springframework.http.MediaType;
@@ -27,5 +28,10 @@ public class GithubController {
     @GetMapping(value = "/{username}/{repo}/branches")
     public Mono<List<BranchDto>> getAllBranches(@PathVariable String username, @PathVariable String repo){
         return githubService.getAllBranches(username, repo);
+    }
+
+    @GetMapping(value = "/{username}/combined")
+    public Mono<List<RepositoryBranchDto>> getRepositoriesAndBranches(@PathVariable String username){
+        return githubService.getRepositoryBranchCombined(username);
     }
 }

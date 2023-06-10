@@ -17,7 +17,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
-//todo merge the response from APIs into the desired Dto and expose it after using GET request
+//todo Error response for 406 needs modification
 @Service
 public class GithubService {
     private final WebClient webClient;
@@ -39,7 +39,7 @@ public class GithubService {
                         "No such user with username: "+username+" exists")))
                 .onStatus(HttpStatus.NOT_ACCEPTABLE::equals,
                         response -> Mono.error(new UnsupportedHeaderException(
-                                    "Unsupported header the accepted header should be Accept: application/json")))
+                                    "Unsupported header, the accepted header should be Accept: application/json")))
                 .bodyToFlux(String.class)
                 .flatMap(repoJson -> mapToRepositoryDto(repoJson, username))
                 .collectList();
@@ -100,5 +100,18 @@ public class GithubService {
         }
     }
 
-//    public Mono<List<RepositoryBranchDto>> getRepositoryBranchCombined(String username){}
+    public Mono<List<RepositoryBranchDto>> getRepositoryBranchCombined(String username) {
+        return getAllRepos(username)
+                .flatMapIterable(repos -> repos)
+                .flatMap(repo -> getAllBranches(username, repo.getName())
+                        .map(branches -> {
+                            RepositoryBranchDto repoBranchDto = new RepositoryBranchDto();
+                            repoBranchDto.setName(repo.getName());
+                            repoBranchDto.setOwner(repo.getLogin());
+                            repoBranchDto.setBranch(branches);
+                            return repoBranchDto;
+                        })
+                )
+                .collectList();
+    }
 }

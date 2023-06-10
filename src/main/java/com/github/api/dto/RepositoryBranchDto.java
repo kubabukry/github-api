@@ -12,5 +12,5 @@ import java.util.List;
 public class RepositoryBranchDto {
     private String name;
     private String owner;
-    private List<BranchDto> branchDtoList;
+    private List<BranchDto> branch;
 }
