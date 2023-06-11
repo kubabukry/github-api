@@ -29,5 +29,4 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
     public ErrorResponse handleUnsupportedHeaderException(UnsupportedHeaderException e) {
         return new ErrorResponse(HttpStatus.NOT_ACCEPTABLE.value(), e.getMessage());
     }
-
 }
