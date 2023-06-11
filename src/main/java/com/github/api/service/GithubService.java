@@ -36,6 +36,7 @@ public class GithubService {
         this.objectMapper = objectMapper;
     }
 
+
     public Mono<List<RepositoryDto>> getAllRepos(String username) {
         if(username.isBlank()){
             return Mono.error(new NoSuchUserExistsException("User must not be blank"));
@@ -51,7 +52,7 @@ public class GithubService {
                         response -> Mono.error(new UnsupportedHeaderException(
                                     "Unsupported header, the accepted header should be Accept: application/json")))
                 .bodyToFlux(String.class)
-                .flatMap(repoJson -> mapToRepositoryDto(repoJson, username))
+                .concatMap(repoJson -> mapToRepositoryDto(repoJson, username))
                 .collectList();
     }
 
@@ -93,7 +94,7 @@ public class GithubService {
                         response -> Mono.error(new UnsupportedHeaderException(
                                 "Unsupported header the accepted header should be Accept: application/json")))
                 .bodyToFlux(String.class)
-                .flatMap(branchJson -> mapToBranchDto(branchJson))
+                .concatMap(branchJson -> mapToBranchDto(branchJson))
                 .collectList();
     }
 

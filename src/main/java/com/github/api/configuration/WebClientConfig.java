@@ -12,17 +12,8 @@ public class WebClientConfig {
 
     @Bean
     public ObjectMapper objectMapper(){
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        return objectMapper;
+        return new ObjectMapper();
     }
-
-//    @Bean
-//    public WebClient webClient(){
-//        return WebClient.builder()
-//                .baseUrl("https://api.github.com")
-//                .build();
-//    }
 @Bean
 public WebClient webClient(){
     return WebClient.builder()
