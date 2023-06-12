@@ -45,15 +45,15 @@ For properly set environmental variables and gradle installed, follow the setup 
 ## Usage
 - Main endpoint for getting combined data in response
 
-`GET http://localhost:<server-port>/<github-username>/combined`
+`GET http://localhost:<server-port>/{github-username}/combined`
 
 - Helper endpoint for getting all repositories of given owner
 
-`GET http://localhost:<server-port>/<github-username>`
+`GET http://localhost:<server-port>/{github-username}`
 
 - Helper endpoint for getting all branches of given owner and repository
 
-`GET http://localhost:<server-port>/<github-username>/<repository-name>/branches`
+`GET http://localhost:<server-port>/{github-username}/{repository-name}/branches`
 
 Server port is `8080` by default
 
